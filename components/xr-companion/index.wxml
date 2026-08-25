@@ -1,0 +1,33 @@
+<xr-scene
+  id="companion-scene"
+  bind:ready="handleReady"
+  bind:error="handleError"
+>
+  <xr-assets bind:progress="handleAssetsProgress" bind:loaded="handleAssetsLoaded">
+    <xr-asset-material asset-id="companion-mat" effect="standard" />
+    <xr-asset-material asset-id="halo-mat" effect="standard" />
+    <xr-asset-material asset-id="planet-mat" effect="standard" />
+  </xr-assets>
+
+  <xr-node>
+    <xr-node node-id="companion" position="0 0.15 -4">
+      <xr-mesh node-id="body" position="0 -0.45 0" scale="0.74 0.86 0.58" geometry="cylinder" material="companion-mat" uniforms="u_baseColorFactor:0.36 0.53 1 1" />
+      <xr-mesh node-id="head" position="0 0.58 0" scale="0.76 0.76 0.76" geometry="sphere" material="companion-mat" uniforms="u_baseColorFactor:0.58 0.78 1 1" />
+      <xr-mesh node-id="left-eye" position="-0.26 0.65 -0.68" scale="0.09 0.13 0.06" geometry="sphere" material="planet-mat" uniforms="u_baseColorFactor:0.98 0.86 0.52 1" />
+      <xr-mesh node-id="right-eye" position="0.26 0.65 -0.68" scale="0.09 0.13 0.06" geometry="sphere" material="planet-mat" uniforms="u_baseColorFactor:0.98 0.86 0.52 1" />
+      <xr-mesh node-id="left-hand" position="-0.82 -0.38 0" rotation="0 0 -22" scale="0.2 0.52 0.2" geometry="cylinder" material="companion-mat" uniforms="u_baseColorFactor:0.42 0.62 1 1" />
+      <xr-mesh node-id="right-hand" position="0.82 -0.38 0" rotation="0 0 22" scale="0.2 0.52 0.2" geometry="cylinder" material="companion-mat" uniforms="u_baseColorFactor:0.42 0.62 1 1" />
+      <xr-mesh node-id="halo" position="0 1.18 0" rotation="70 0 0" scale="0.9 0.08 0.9" geometry="cylinder" material="halo-mat" uniforms="u_baseColorFactor:0.64 0.58 1 1" />
+    </xr-node>
+
+    <xr-mesh node-id="planet" position="-1.45 -1.05 -4.1" scale="0.34 0.34 0.34" geometry="sphere" material="planet-mat" uniforms="u_baseColorFactor:0.98 0.58 0.5 1" />
+    <xr-mesh node-id="planet-ring" position="-1.45 -1.05 -4.1" rotation="70 0 0" scale="0.54 0.06 0.54" geometry="cylinder" material="halo-mat" uniforms="u_baseColorFactor:0.95 0.72 0.48 1" />
+
+    <xr-camera id="camera" node-id="camera" position="0 0.35 1.7" clear-color="0.043 0.063 0.133 1" target="companion" camera-orbit-control="" />
+  </xr-node>
+
+  <xr-node node-id="lights">
+    <xr-light type="ambient" color="1 1 1" intensity="1.1" />
+    <xr-light type="directional" rotation="40 160 0" color="0.78 0.86 1" intensity="3" />
+  </xr-node>
+</xr-scene>

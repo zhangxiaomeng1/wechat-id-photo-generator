@@ -8,6 +8,8 @@ Page({
     avatarMeta: null,
     avatarCreated: false,
     avatarName: '光年旅人',
+    xrReady: true,
+    xrFailed: false,
     companions: COMPANIONS,
     selectedCompanion: 'nova',
     selectedMood: 'calm',
@@ -34,6 +36,15 @@ Page({
         pulseCount: companion.pulseCount || 0
       })
     }
+  },
+
+  handleXRReady() {
+    this.setData({ xrReady: true, xrFailed: false })
+  },
+
+  handleXRError() {
+    this.setData({ xrReady: false, xrFailed: true })
+    wx.showToast({ title: '3D 场景不可用，已切换基础模式', icon: 'none' })
   },
 
   openCamera() {

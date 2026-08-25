@@ -12,14 +12,24 @@
   <view class="space-stage">
     <view class="star star-one">✦</view><view class="star star-two">·</view><view class="star star-three">✧</view>
     <view class="orbit orbit-one"></view><view class="orbit orbit-two"></view>
-    <view wx:if="{{avatarCreated}}" class="avatar-scene">
+    <view class="xr-stage" wx:if="{{xrReady}}">
+      <xr-companion bind:ready="handleXRReady" bind:error="handleXRError" />
+      <view class="xr-hint">拖动场景，看看你的 3D 陪伴</view>
+      <view wx:if="{{avatarCreated}}" class="xr-avatar-badge"><text class="online-dot"></text>{{avatarName}} 已进入 3D 宇宙</view>
+    </view>
+    <view wx:elif="{{xrFailed}}" class="xr-fallback">
+      <view class="empty-symbol">✦</view>
+      <view class="empty-title">当前环境暂不支持 3D</view>
+      <view class="empty-subtitle">已保留陪伴宇宙的本地玩法</view>
+    </view>
+    <view wx:if="{{avatarCreated && xrFailed}}" class="avatar-scene">
       <view class="avatar-glow"></view>
       <view class="avatar-ring"></view>
       <image class="avatar-portrait" src="{{avatarPath}}" mode="aspectFill"></image>
       <view class="avatar-tag">{{avatarName}}</view>
     </view>
-    <view wx:else class="empty-space"><view class="empty-symbol">✦</view><view class="empty-title">先创建你的分身</view><view class="empty-subtitle">一张照片，就能开启自己的小宇宙</view></view>
-    <view wx:if="{{avatarCreated}}" class="space-status"><text class="online-dot"></text>分身在线 · 互动 {{pulseCount}} 次</view>
+    <view wx:elif="{{xrFailed}}" class="empty-space"><view class="empty-symbol">✦</view><view class="empty-title">先创建你的分身</view><view class="empty-subtitle">一张照片，就能开启自己的小宇宙</view></view>
+    <view wx:if="{{avatarCreated && xrFailed}}" class="space-status"><text class="online-dot"></text>分身在线 · 互动 {{pulseCount}} 次</view>
   </view>
 
   <view wx:if="{{cameraOpen}}" class="camera-card">
