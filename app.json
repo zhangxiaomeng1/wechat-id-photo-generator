@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "个人主页",
+    "navigationBarBackgroundColor": "#0b0f14",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f6f7",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,95 @@
+<view class="page">
+  <view class="hero" id="top">
+    <view class="hero-glow glow-one"></view>
+    <view class="hero-glow glow-two"></view>
+
+    <view class="nav">
+      <view class="brand-mark">XM<text class="brand-dot">.</text></view>
+      <view class="nav-right">
+        <text class="nav-label">PERSONAL SITE</text>
+        <view class="status-dot"></view>
+      </view>
+    </view>
+
+    <view class="hero-content">
+      <view class="eyebrow"><text class="eyebrow-line"></text> HELLO, I'M XIAOMENG</view>
+      <view class="hero-title">把想法<text class="title-break">做成</text><text class="title-highlight">能被使用的东西。</text></view>
+      <view class="hero-desc">一个在产品、内容与 AI 之间不断探索的人。<text class="line-break">相信好的创造，应该让生活更清晰一点。</text></view>
+      <view class="hero-actions">
+        <button class="button button-light" data-target="work" bindtap="scrollTo">看看作品 <text class="arrow">↘</text></button>
+        <button class="button button-ghost" data-target="contact" bindtap="scrollTo">和我聊聊</button>
+      </view>
+    </view>
+
+    <view class="hero-bottom">
+      <view class="location"><text class="location-pin">✦</text> BASED IN SHANGHAI</view>
+      <view class="scroll-hint"><text>SCROLL TO EXPLORE</text><view class="scroll-line"></view></view>
+    </view>
+  </view>
+
+  <view class="intro section-pad">
+    <view class="section-kicker">01 / A LITTLE ABOUT ME</view>
+    <view class="intro-layout">
+      <view class="intro-title"><text class="line-break">我关心的，</text><text>是事情本来的样子。</text></view>
+      <view class="intro-copy">
+        <view class="avatar-placeholder"><text>XM</text></view>
+        <view class="intro-text">我喜欢从真实的问题出发，拆解、思考，再用设计和技术把答案做出来。这里记录我的作品、想法，以及那些正在发生的实验。</view>
+        <view class="signature">keep making <text>✳</text></view>
+      </view>
+    </view>
+    <view class="metrics">
+      <view class="metric"><text class="metric-number">08</text><text class="metric-label">YEARS OF MAKING</text></view>
+      <view class="metric"><text class="metric-number">26</text><text class="metric-label">PROJECTS SHIPPED</text></view>
+      <view class="metric"><text class="metric-number">∞</text><text class="metric-label">IDEAS IN PROGRESS</text></view>
+    </view>
+  </view>
+
+  <view class="work dark-section section-pad" id="work">
+    <view class="work-head">
+      <view class="section-kicker light-kicker">02 / SELECTED WORK</view>
+      <view class="work-heading"><text class="line-break">一些已经</text><text>发生的作品。</text></view>
+      <view class="work-note">每个项目，都从一个真实的困惑开始。</view>
+    </view>
+    <view class="project-list">
+      <block wx:for="{{projects}}" wx:key="number">
+        <view class="project-card" bindtap="showComingSoon">
+          <view class="project-top"><text class="project-number">{{item.number}}</text><text class="project-type">{{item.type}}</text><text class="project-arrow">↗</text></view>
+          <view class="project-title">{{item.title}}</view>
+          <view class="project-desc">{{item.desc}}</view>
+          <view class="tag-list"><text class="tag {{item.color}}" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text></view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="process section-pad" id="process">
+    <view class="section-kicker">03 / HOW I WORK</view>
+    <view class="process-title"><text class="line-break">先找到问题，</text><text>再决定答案长什么样。</text></view>
+    <view class="process-grid">
+      <view class="process-item"><text class="process-index">01</text><text class="process-name">LISTEN</text><text class="process-desc">先听见真实的声音，理解问题发生的现场。</text></view>
+      <view class="process-item"><text class="process-index">02</text><text class="process-name">MAKE</text><text class="process-desc">快速做出一个版本，让想法接受现实的检验。</text></view>
+      <view class="process-item"><text class="process-index">03</text><text class="process-name">REFINE</text><text class="process-desc">不断删减和打磨，直到它足够清晰、好用。</text></view>
+    </view>
+  </view>
+
+  <view class="journey section-pad">
+    <view class="section-kicker">04 / THE JOURNEY</view>
+    <view class="journey-layout">
+      <view class="journey-title"><text class="line-break">一直在路上，</text><text>也一直在更新。</text></view>
+      <view class="timeline">
+        <block wx:for="{{timeline}}" wx:key="year">
+          <view class="timeline-item"><view class="timeline-dot"></view><view class="timeline-year">{{item.year}}</view><view class="timeline-content"><text class="timeline-title">{{item.title}}</text><text class="timeline-desc">{{item.desc}}</text></view></view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="contact dark-section section-pad" id="contact">
+    <view class="contact-orbit orbit-one"></view><view class="contact-orbit orbit-two"></view>
+    <view class="section-kicker light-kicker">05 / SAY HELLO</view>
+    <view class="contact-title"><text class="line-break">有想法？</text><text>我们聊聊。</text></view>
+    <view class="contact-copy">无论是一个新项目、一次合作，还是单纯想交换想法，都欢迎来找我。</view>
+    <button class="email-button" bindtap="copyEmail">hello@example.com <text>↗</text></button>
+    <view class="contact-footer"><text>© 2025 XIAOMENG</text><text>MADE WITH CURIOSITY ✳</text></view>
+  </view>
+</view>
