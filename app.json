@@ -4,8 +4,8 @@
   ],
   "window": {
     "navigationBarTitleText": "证件照生成器",
-    "navigationBarBackgroundColor": "#0b0f14",
-    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#f5f5f7",
+    "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f6f7",
     "backgroundTextStyle": "dark",
     "enablePullDownRefresh": false

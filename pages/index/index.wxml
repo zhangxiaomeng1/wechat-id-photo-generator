@@ -1,47 +1,59 @@
 <view class="page">
-  <view class="hero">
-    <view class="hero-orbit orbit-large"></view>
-    <view class="hero-orbit orbit-small"></view>
-    <view class="nav"><view class="brand">XM<text>.</text></view><view class="nav-status"><text class="status-dot"></text> ID PHOTO STUDIO</view></view>
-    <view class="hero-copy">
-      <view class="eyebrow"><text class="eyebrow-line"></text> QUICK PHOTO TOOL</view>
-      <view class="title">一张照片，<text>生成标准证件照。</text></view>
-    <view class="subtitle">上传照片，选择尺寸，快速导出一寸、二寸证件照。</view>
-    </view>
-    <view class="hero-foot"><text>LOCAL PROCESSING</text><text>01 / 03</text></view>
+  <view class="topbar">
+    <view class="topbar-title">证件照</view>
+    <view class="privacy-pill"><text class="privacy-dot"></text>本地处理</view>
   </view>
 
-  <view class="workspace">
-    <view class="section-label">01 / UPLOAD PHOTO</view>
-    <view class="upload-card" bindtap="choosePhoto">
-      <image wx:if="{{photoPath}}" class="source-image" src="{{photoPath}}" mode="aspectFill"></image>
-      <view wx:else class="upload-empty"><view class="upload-icon">＋</view><text class="upload-title">上传一张正面照片</text><text class="upload-hint">支持从相册选择，或直接拍摄</text></view>
-      <view wx:if="{{photoPath}}" class="change-photo">重新选择</view>
+  <view class="intro">
+    <view class="intro-kicker">ID PHOTO</view>
+    <view class="intro-title">一张照片，<text>生成标准证件照。</text></view>
+    <view class="intro-subtitle">简单三步，导出一寸或二寸白底证件照。原图只在本地处理。</view>
+  </view>
+
+  <view class="content">
+    <view class="step-heading">
+      <view class="step-number">1</view>
+      <view><view class="step-title">上传照片</view><view class="step-subtitle">建议使用光线均匀的正面照片</view></view>
     </view>
 
-    <view class="section-label spacing-top">02 / SELECT SIZE</view>
-    <view class="size-grid">
+    <view class="upload-card" bindtap="choosePhoto">
+      <image wx:if="{{photoPath}}" class="source-image" src="{{photoPath}}" mode="aspectFill"></image>
+      <view wx:else class="upload-placeholder">
+        <view class="upload-symbol">＋</view>
+        <view class="upload-title">选择照片</view>
+        <view class="upload-hint">从相册选择，或使用相机拍摄</view>
+      </view>
+      <view wx:if="{{photoPath}}" class="image-overlay"><view class="change-photo">更换照片</view></view>
+    </view>
+
+    <view class="step-heading section-gap">
+      <view class="step-number">2</view>
+      <view><view class="step-title">选择尺寸</view><view class="step-subtitle">按常见证件照规格输出</view></view>
+    </view>
+
+    <view class="size-list">
       <view wx:for="{{photoSpecs}}" wx:key="key" class="size-card {{selectedSize === item.key ? 'active' : ''}}" data-key="{{item.key}}" bindtap="selectSize">
-        <view class="size-check">{{selectedSize === item.key ? '✓' : ''}}</view>
-        <view class="size-name">{{item.label}}</view>
+        <view class="size-card-top"><view class="size-name">{{item.label}}</view><view class="size-check">{{selectedSize === item.key ? '✓' : ''}}</view></view>
+        <view class="size-preview"><view class="ratio-shape ratio-{{item.key}}"></view></view>
         <view class="size-detail">{{item.size}}</view>
         <view class="size-pixel">{{item.pixelWidth}} × {{item.pixelHeight}} px</view>
       </view>
     </view>
 
-    <view class="section-label spacing-top">03 / EXPORT</view>
-    <button class="generate-button" loading="{{isGenerating}}" bindtap="generatePhoto">{{isGenerating ? '正在生成…' : '生成证件照'}} <text>↗</text></button>
+    <view class="export-info"><view class="export-icon">✓</view><view><view class="export-title">白底 JPG 输出</view><view class="export-subtitle">适合打印和线上提交</view></view><view class="export-arrow">›</view></view>
+
+    <button class="primary-button" loading="{{isGenerating}}" bindtap="generatePhoto">{{isGenerating ? '正在生成…' : '生成证件照'}}<text class="button-arrow">›</text></button>
 
     <view class="result-card" wx:if="{{resultPath}}">
-      <view class="result-heading"><view><view class="section-label">RESULT / READY</view><view class="result-title">你的证件照</view></view><view class="result-badge">{{selectedSize === 'one' ? '一寸' : '二寸'}}</view></view>
-      <image class="result-image" src="{{resultPath}}" mode="widthFix"></image>
+      <view class="result-heading"><view><view class="result-kicker">READY TO SAVE</view><view class="result-title">你的证件照</view></view><view class="result-badge">{{selectedSize === 'one' ? '一寸' : '二寸'}}</view></view>
+      <view class="result-stage"><image class="result-image" src="{{resultPath}}" mode="widthFix"></image></view>
       <button class="save-button" bindtap="savePhoto">保存到相册</button>
     </view>
 
     <canvas id="idPhotoCanvas" type="2d" class="photo-canvas"></canvas>
 
-    <view class="note-card"><text class="note-mark">✳</text><view><text class="note-title">关于生成效果</text><text class="note-copy">当前版本在本地完成裁剪、白底排版和导出，不会上传原图。自动抠图换蓝/红底需要后续接入图像处理服务。</text></view></view>
+    <view class="note-card"><view class="note-icon">i</view><view><view class="note-title">关于生成效果</view><view class="note-copy">当前版本在本地完成裁剪、白底排版和导出，不会上传原图。自动抠图换蓝/红底需要后续接入图像处理服务。</view></view></view>
   </view>
 
-  <view class="footer"><view class="brand">XM<text>.</text></view><text>MAKE IT USEFUL.</text></view>
+  <view class="footer"><text>PRIVATE BY DEFAULT</text><text>WECHAT MINI PROGRAM</text></view>
 </view>
