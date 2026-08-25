@@ -1,0 +1,52 @@
+<view class="universe-page">
+  <view class="universe-topbar">
+    <view><view class="universe-kicker">PERSONAL UNIVERSE</view><view class="universe-top-title">陪伴宇宙</view></view>
+    <view class="local-pill"><text class="local-dot"></text>只保存在本地</view>
+  </view>
+
+  <view class="universe-intro">
+    <view class="universe-title">把自己，<text>放进一个宇宙。</text></view>
+    <view class="universe-subtitle">用实时摄像头或一张照片，创建属于你的分身。这里不是社交广场，是你和陪伴角色的小小星球。</view>
+  </view>
+
+  <view class="space-stage">
+    <view class="star star-one">✦</view><view class="star star-two">·</view><view class="star star-three">✧</view>
+    <view class="orbit orbit-one"></view><view class="orbit orbit-two"></view>
+    <view wx:if="{{avatarCreated}}" class="avatar-scene">
+      <view class="avatar-glow"></view>
+      <view class="avatar-ring"></view>
+      <image class="avatar-portrait" src="{{avatarPath}}" mode="aspectFill"></image>
+      <view class="avatar-tag">{{avatarName}}</view>
+    </view>
+    <view wx:else class="empty-space"><view class="empty-symbol">✦</view><view class="empty-title">先创建你的分身</view><view class="empty-subtitle">一张照片，就能开启自己的小宇宙</view></view>
+    <view wx:if="{{avatarCreated}}" class="space-status"><text class="online-dot"></text>分身在线 · 互动 {{pulseCount}} 次</view>
+  </view>
+
+  <view wx:if="{{cameraOpen}}" class="camera-card">
+    <camera class="camera-preview" device-position="front" flash="off" binderror="handleCameraError"></camera>
+    <view class="camera-tip">请让脸部位于画面中央</view>
+    <view class="camera-actions"><button class="camera-close" bindtap="closeCamera">取消</button><button class="capture-button" loading="{{isCapturing}}" bindtap="takePhoto">拍摄分身</button></view>
+  </view>
+
+  <view wx:else class="create-card">
+    <view class="card-kicker">CREATE YOUR AVATAR</view>
+    <view class="card-title">创建我的分身</view>
+    <view class="card-subtitle">照片只用于本地展示，不上传服务器。</view>
+    <view class="create-actions"><button class="camera-button" bindtap="openCamera"><text>⌾</text>打开实时摄像头</button><button class="album-button" bindtap="chooseAvatar"><text>＋</text>从相册选择</button></view>
+    <button wx:if="{{avatarCreated}}" class="reset-button" bindtap="resetAvatar">重新创建分身</button>
+  </view>
+
+  <view wx:if="{{avatarCreated}}" class="companion-card">
+    <view class="card-header"><view><view class="card-kicker">YOUR COMPANION</view><view class="card-title">选择一个陪伴角色</view></view><view class="relationship">已连接</view></view>
+    <scroll-view class="companion-list" scroll-x="true" enable-flex="true">
+      <view wx:for="{{companions}}" wx:key="key" class="companion-option {{selectedCompanion === item.key ? 'active' : ''}}" data-key="{{item.key}}" bindtap="selectCompanion">
+        <view class="companion-symbol" style="color: {{item.color}}">{{item.symbol}}</view><view class="companion-name">{{item.name}}</view><view class="companion-description">{{item.description}}</view>
+      </view>
+    </scroll-view>
+    <view class="companion-message"><view class="message-avatar">✦</view><view class="message-copy"><view class="message-name">{{selectedCompanion === 'nova' ? '星芽' : selectedCompanion === 'tide' ? '潮汐' : '轨道'}}</view><view class="message-text">{{companionMessage}}</view></view></view>
+    <view class="mood-row"><view class="mood-label">今天的状态</view><view class="mood-options"><view class="mood-option {{selectedMood === 'calm' ? 'active' : ''}}" data-mood="calm" bindtap="selectMood">平静</view><view class="mood-option {{selectedMood === 'focused' ? 'active' : ''}}" data-mood="focused" bindtap="selectMood">专注</view><view class="mood-option {{selectedMood === 'curious' ? 'active' : ''}}" data-mood="curious" bindtap="selectMood">好奇</view></view></view>
+    <view class="pulse-actions"><button bindtap="sendPulse" data-action="wave">打个招呼</button><button bindtap="sendPulse" data-action="explore">去漫游</button><button bindtap="sendPulse" data-action="breathe">一起呼吸</button></view>
+  </view>
+
+  <view class="privacy-note"><view class="privacy-icon">⌁</view><view><view class="privacy-title">你的分身属于你</view><view class="privacy-copy">本页不接入账号、广告或远程图像服务。照片和互动状态保存在当前设备。</view></view></view>
+</view>

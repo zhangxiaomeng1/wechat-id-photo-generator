@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "陪伴宇宙",
+  "navigationBarBackgroundColor": "#0b1022",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#0b1022",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": false
+}

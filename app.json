@@ -1,6 +1,7 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/universe/index"
   ],
   "window": {
     "navigationBarTitleText": "证件照生成器",
@@ -11,5 +12,21 @@
     "enablePullDownRefresh": false
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "color": "#86868b",
+    "selectedColor": "#0071e3",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "证件照"
+      },
+      {
+        "pagePath": "pages/universe/index",
+        "text": "陪伴宇宙"
+      }
+    ]
+  }
 }
