@@ -13,8 +13,9 @@
     <view class="star star-one">✦</view><view class="star star-two">·</view><view class="star star-three">✧</view>
     <view class="orbit orbit-one"></view><view class="orbit orbit-two"></view>
     <view class="xr-stage" wx:if="{{xrReady}}">
-      <xr-companion bind:ready="handleXRReady" bind:error="handleXRError" />
-      <view class="xr-hint">拖动场景，看看你的 3D 陪伴</view>
+      <xr-companion avatar-path="{{avatarPath}}" avatar-version="{{avatarVersion}}" bind:ready="handleXRReady" bind:error="handleXRError" />
+      <view class="xr-topbar"><view class="xr-live-pill"><text class="online-dot"></text>LIVE 3D</view><view class="xr-hint">拖动旋转 · 双指缩放</view></view>
+      <view wx:if="{{avatarCreated}}" class="xr-avatar-chip"><image src="{{avatarPath}}" mode="aspectFill"></image><view><view class="xr-chip-name">{{avatarName}}</view><view class="xr-chip-status">头像已同步到场景</view></view></view>
       <view wx:if="{{avatarCreated}}" class="xr-avatar-badge"><text class="online-dot"></text>{{avatarName}} 已进入 3D 宇宙</view>
     </view>
     <view wx:elif="{{xrFailed}}" class="xr-fallback">
@@ -33,8 +34,8 @@
   </view>
 
   <view wx:if="{{cameraOpen}}" class="camera-card">
-    <camera class="camera-preview" device-position="front" flash="off" binderror="handleCameraError"></camera>
-    <view class="camera-tip">请让脸部位于画面中央</view>
+    <view class="camera-frame"><camera class="camera-preview" device-position="front" flash="off" frame-size="medium" bindinitdone="handleCameraReady" binderror="handleCameraError"></camera><view class="camera-guide"></view><view class="camera-live"><text class="online-dot"></text>{{cameraReady ? '实时画面已连接' : '正在连接实时画面'}}</view></view>
+    <view class="camera-tip">请让脸部位于画面中央，拍摄后会立即同步到 3D 场景</view>
     <view class="camera-actions"><button class="camera-close" bindtap="closeCamera">取消</button><button class="capture-button" loading="{{isCapturing}}" bindtap="takePhoto">拍摄分身</button></view>
   </view>
 

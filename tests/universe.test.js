@@ -1,4 +1,6 @@
 const assert = require('assert')
+const fs = require('fs')
+const path = require('path')
 const { COMPANIONS, getAvatarName, getCompanionGreeting } = require('../utils/universe')
 
 assert.strictEqual(COMPANIONS.length, 3)
@@ -6,5 +8,19 @@ assert.strictEqual(getAvatarName(0), '光年旅人')
 assert.strictEqual(getAvatarName(4), '光年旅人')
 assert.strictEqual(getCompanionGreeting('curious'), '前面有一颗新星，要一起去看看吗？')
 assert.strictEqual(getCompanionGreeting('unknown'), '我在这里，陪你慢慢探索。')
+
+const pageSource = fs.readFileSync(path.join(__dirname, '../pages/universe/index.js'), 'utf8')
+const templateSource = fs.readFileSync(path.join(__dirname, '../pages/universe/index.wxml'), 'utf8')
+const componentSource = fs.readFileSync(path.join(__dirname, '../components/xr-companion/index.js'), 'utf8')
+
+assert.ok(pageSource.includes("scope: 'scope.camera'"))
+assert.ok(pageSource.includes('wx.chooseMedia'))
+assert.ok(pageSource.includes('avatarVersion'))
+assert.ok(templateSource.includes('avatar-path="{{avatarPath}}"'))
+assert.ok(templateSource.includes('avatar-version="{{avatarVersion}}"'))
+assert.ok(componentSource.includes('loadAvatarTexture'))
+assert.ok(componentSource.includes("setTexture('u_baseColorMap'"))
+assert.ok(componentSource.includes('handleTick'))
+assert.ok(componentSource.includes('rotation.y'))
 
 console.log('universe tests passed')
