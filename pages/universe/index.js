@@ -3,6 +3,7 @@ const { COMPANIONS, getAvatarName, getCompanionGreeting } = require('../../utils
 Page({
   data: {
     cameraOpen: false,
+    immersiveMode: false,
     isCapturing: false,
     cameraReady: false,
     arReady: false,
@@ -30,7 +31,8 @@ Page({
         avatarMeta: saved.meta || null,
         avatarCreated: true,
         avatarName: saved.name || '光年旅人',
-        avatarVersion: saved.version || Date.now()
+        avatarVersion: saved.version || Date.now(),
+        immersiveMode: true
       })
     }
     if (companion) {
@@ -57,7 +59,7 @@ Page({
   },
 
   openCamera() {
-    const showCamera = () => this.setData({ cameraOpen: true, cameraReady: false, arReady: false, arFailed: false, xrReady: true, xrFailed: false })
+    const showCamera = () => this.setData({ cameraOpen: true, immersiveMode: true, cameraReady: false, arReady: false, arFailed: false, xrReady: true, xrFailed: false })
     if (typeof wx.getSetting !== 'function') {
       showCamera()
       return
@@ -94,7 +96,11 @@ Page({
   },
 
   closeCamera() {
-    this.setData({ cameraOpen: false, isCapturing: false, cameraReady: false, arReady: false, arFailed: false })
+    this.setData({ cameraOpen: false, immersiveMode: this.data.avatarCreated, isCapturing: false, cameraReady: false, arReady: false, arFailed: false })
+  },
+
+  exitImmersive() {
+    this.setData({ immersiveMode: false })
   },
 
   handleCameraReady() {
@@ -102,7 +108,7 @@ Page({
   },
 
   handleCameraError() {
-    this.setData({ cameraOpen: false, isCapturing: false, cameraReady: false })
+    this.setData({ cameraOpen: false, immersiveMode: this.data.avatarCreated, isCapturing: false, cameraReady: false })
     wx.showToast({ title: '相机暂时不可用，请从相册选择', icon: 'none' })
   },
 
@@ -194,6 +200,7 @@ Page({
       avatarName: name,
       avatarVersion: version,
       cameraOpen: false,
+      immersiveMode: true,
       isCapturing: false,
       cameraReady: false,
       companionMessage: '你的分身已经准备好了，欢迎来到自己的宇宙。'
@@ -203,7 +210,7 @@ Page({
 
   resetAvatar() {
     wx.removeStorageSync('metaverse.avatar')
-    this.setData({ avatarPath: '', avatarMeta: null, avatarCreated: false, avatarVersion: 0, cameraOpen: false, cameraReady: false, arReady: false, arFailed: false })
+    this.setData({ avatarPath: '', avatarMeta: null, avatarCreated: false, avatarVersion: 0, cameraOpen: false, immersiveMode: false, cameraReady: false, arReady: false, arFailed: false })
   },
 
   selectCompanion(e) {

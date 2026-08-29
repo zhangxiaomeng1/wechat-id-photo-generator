@@ -1,21 +1,21 @@
-<view class="universe-page {{cameraOpen ? 'immersive-page' : ''}}">
-  <view class="universe-topbar {{cameraOpen ? 'immersive-topbar' : ''}}">
+<view class="universe-page {{immersiveMode ? 'immersive-page' : ''}}">
+  <view class="universe-topbar {{immersiveMode ? 'immersive-topbar' : ''}}">
     <view><view class="universe-kicker">PERSONAL UNIVERSE</view><view class="universe-top-title">陪伴宇宙</view></view>
     <view class="local-pill"><text class="local-dot"></text>只保存在本地</view>
   </view>
 
-  <view wx:if="{{!cameraOpen}}" class="universe-intro">
+  <view wx:if="{{!immersiveMode}}" class="universe-intro">
     <view class="universe-title">把自己，<text>放进一个宇宙。</text></view>
     <view class="universe-subtitle">用实时摄像头或一张照片，创建属于你的分身。这里不是社交广场，是你和陪伴角色的小小星球。</view>
   </view>
 
-  <view class="space-stage {{cameraOpen ? 'immersive-stage' : ''}}">
+  <view class="space-stage {{immersiveMode ? 'immersive-stage' : ''}}">
     <view class="star star-one">✦</view><view class="star star-two">·</view><view class="star star-three">✧</view>
     <view class="orbit orbit-one"></view><view class="orbit orbit-two"></view>
     <view class="xr-stage" wx:if="{{xrReady}}">
       <xr-companion wx:if="{{!cameraOpen}}" avatar-path="{{avatarPath}}" avatar-version="{{avatarVersion}}" bind:ready="handleXRReady" bind:error="handleXRError" />
       <xr-ar-companion wx:else avatar-path="{{avatarPath}}" avatar-version="{{avatarVersion}}" bind:ready="handleXRReady" bind:arready="handleARReady" bind:error="handleARError" />
-      <view wx:if="{{!cameraOpen}}" class="xr-topbar"><view class="xr-live-pill"><text class="online-dot"></text>LIVE 3D</view><view class="xr-hint">拖动旋转 · 双指缩放</view></view>
+      <view wx:if="{{!cameraOpen}}" class="xr-topbar"><view class="xr-live-pill"><text class="online-dot"></text>LIVE 3D</view><view class="xr-hint">拖动旋转 · 双指缩放</view><button wx:if="{{immersiveMode && !cameraOpen}}" class="immersive-close" bindtap="exitImmersive">退出全屏</button></view>
       <view wx:if="{{cameraOpen}}" class="ar-topbar"><view class="xr-live-pill"><text class="online-dot"></text>{{arReady ? 'LIVE AR' : '连接实时画面'}}</view><button class="ar-close" bindtap="closeCamera">退出 AR</button></view>
       <view wx:if="{{avatarCreated}}" class="xr-avatar-chip"><image src="{{avatarPath}}" mode="aspectFill"></image><view><view class="xr-chip-name">{{avatarName}}</view><view class="xr-chip-status">头像已同步到场景</view></view></view>
       <view wx:if="{{avatarCreated && !cameraOpen}}" class="xr-avatar-badge"><text class="online-dot"></text>{{avatarName}} 已进入 3D 宇宙</view>
@@ -42,7 +42,7 @@
     <view class="camera-actions"><button class="camera-close" bindtap="closeCamera">取消</button><button class="capture-button" loading="{{isCapturing}}" bindtap="takePhoto">拍摄并同步</button></view>
   </view>
 
-  <view wx:if="{{!cameraOpen}}" class="create-card">
+  <view wx:if="{{!immersiveMode}}" class="create-card">
     <view class="card-kicker">CREATE YOUR AVATAR</view>
     <view class="card-title">创建我的分身</view>
     <view class="card-subtitle">照片只用于本地展示，不上传服务器。</view>
@@ -50,7 +50,7 @@
     <button wx:if="{{avatarCreated}}" class="reset-button" bindtap="resetAvatar">重新创建分身</button>
   </view>
 
-  <view wx:if="{{avatarCreated && !cameraOpen}}" class="companion-card">
+  <view wx:if="{{avatarCreated && !immersiveMode}}" class="companion-card">
     <view class="card-header"><view><view class="card-kicker">YOUR COMPANION</view><view class="card-title">选择一个陪伴角色</view></view><view class="relationship">已连接</view></view>
     <scroll-view class="companion-list" scroll-x="true" enable-flex="true">
       <view wx:for="{{companions}}" wx:key="key" class="companion-option {{selectedCompanion === item.key ? 'active' : ''}}" data-key="{{item.key}}" bindtap="selectCompanion">
@@ -62,5 +62,5 @@
     <view class="pulse-actions"><button bindtap="sendPulse" data-action="wave">打个招呼</button><button bindtap="sendPulse" data-action="explore">去漫游</button><button bindtap="sendPulse" data-action="breathe">一起呼吸</button></view>
   </view>
 
-  <view wx:if="{{!cameraOpen}}" class="privacy-note"><view class="privacy-icon">⌁</view><view><view class="privacy-title">你的分身属于你</view><view class="privacy-copy">本页不接入账号、广告或远程图像服务。照片和互动状态保存在当前设备。</view></view></view>
+  <view wx:if="{{!immersiveMode}}" class="privacy-note"><view class="privacy-icon">⌁</view><view><view class="privacy-title">你的分身属于你</view><view class="privacy-copy">本页不接入账号、广告或远程图像服务。照片和互动状态保存在当前设备。</view></view></view>
 </view>

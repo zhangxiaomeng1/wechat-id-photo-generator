@@ -153,6 +153,19 @@
   pointer-events: none;
 }
 
+.immersive-close {
+  height: 58rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  border: 1rpx solid rgba(255, 255, 255, .16);
+  border-radius: 999rpx;
+  background: rgba(8, 12, 30, .68);
+  color: #fff;
+  font-size: 20rpx;
+  line-height: 58rpx;
+  pointer-events: auto;
+}
+
 .xr-live-pill {
   padding: 12rpx 18rpx;
   border: 1rpx solid rgba(255, 255, 255, .12);
@@ -365,10 +378,15 @@
 
 .camera-fallback-card {
   position: fixed;
-  right: 32rpx;
-  bottom: 24rpx;
-  left: 32rpx;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 20;
+  padding: 0;
+  border-radius: 0;
+  background: #050812;
+  pointer-events: none;
 }
 
 .camera-card { padding: 16rpx; }
@@ -381,6 +399,38 @@
 .camera-actions button { flex: 1; height: 80rpx; border-radius: 16rpx; font-size: 24rpx; }
 .camera-close { background: rgba(255, 255, 255, .08); color: #d4d9ed; }
 .capture-button { background: #a79bff; color: #14142e; font-weight: 700; }
+
+.camera-fallback-card .camera-frame,
+.camera-fallback-card .camera-preview {
+  width: 100%;
+  height: 100vh;
+  border-radius: 0;
+}
+
+.camera-fallback-card .camera-guide {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.camera-fallback-card .camera-tip,
+.camera-fallback-card .camera-actions {
+  position: absolute;
+  right: 24rpx;
+  left: 24rpx;
+  z-index: 2;
+}
+
+.camera-fallback-card .camera-tip {
+  bottom: 160rpx;
+  padding: 14rpx;
+  border-radius: 16rpx;
+  background: rgba(8, 12, 30, .66);
+}
+
+.camera-fallback-card .camera-actions {
+  bottom: 34rpx;
+  pointer-events: auto;
+}
 
 .create-card,
 .companion-card { padding: 28rpx; }
