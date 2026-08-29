@@ -13,6 +13,12 @@ Page({
     avatarCreated: false,
     avatarVersion: 0,
     avatarName: '光年旅人',
+    sceneWidth: 375,
+    sceneHeight: 300,
+    renderWidth: 750,
+    renderHeight: 600,
+    controlTop: 68,
+    avatarChipTop: 122,
     xrReady: true,
     xrFailed: false,
     companions: COMPANIONS,
@@ -23,6 +29,8 @@ Page({
   },
 
   onLoad() {
+    this.showTabBar()
+    this.updateControlInsets()
     const saved = wx.getStorageSync('metaverse.avatar')
     const companion = wx.getStorageSync('metaverse.companion')
     if (saved && saved.path) {
@@ -43,6 +51,116 @@ Page({
         pulseCount: companion.pulseCount || 0
       })
     }
+    this.updateSceneSize(false)
+  },
+
+  onReady() {
+    this.updateSceneSize(this.data.immersiveMode)
+  },
+
+  onShow() {
+    this.updateControlInsets()
+    if (!this.data.immersiveMode) this.showTabBar()
+  },
+
+  onResize() {
+    this.updateControlInsets()
+    this.updateSceneSize(this.data.immersiveMode)
+  },
+
+  onUnload() {
+    this.showTabBar()
+  },
+
+  getWindowMetrics() {
+    const info = typeof wx.getWindowInfo === 'function'
+      ? wx.getWindowInfo()
+      : wx.getSystemInfoSync()
+    return {
+      width: Math.max(1, Number(info.windowWidth) || 375),
+      height: Math.max(1, Number(info.windowHeight) || Number(info.screenHeight) || 667),
+      pixelRatio: Math.max(1, Number(info.pixelRatio) || 1)
+    }
+  },
+
+  updateControlInsets() {
+    const info = typeof wx.getWindowInfo === 'function'
+      ? wx.getWindowInfo()
+      : wx.getSystemInfoSync()
+    const statusBarBottom = Math.max(20, Number(info.statusBarHeight) || 20)
+    let navigationBottom = statusBarBottom + 44
+    if (typeof wx.getMenuButtonBoundingClientRect === 'function') {
+      try {
+        const menuRect = wx.getMenuButtonBoundingClientRect()
+        if (menuRect && menuRect.bottom) navigationBottom = Math.max(navigationBottom, menuRect.bottom)
+      } catch (error) {
+        navigationBottom = statusBarBottom + 44
+      }
+    }
+    const controlTop = Math.ceil(navigationBottom + 12)
+    this.setData({ controlTop, avatarChipTop: controlTop + 54 })
+  },
+
+  applySceneSize(width, height, pixelRatio) {
+    const sceneWidth = Math.max(1, Math.round(width))
+    const sceneHeight = Math.max(1, Math.round(height))
+    this.setData({
+      sceneWidth,
+      sceneHeight,
+      renderWidth: Math.max(1, Math.round(sceneWidth * pixelRatio)),
+      renderHeight: Math.max(1, Math.round(sceneHeight * pixelRatio))
+    })
+  },
+
+  updateSceneSize(immersive) {
+    const metrics = this.getWindowMetrics()
+    const isImmersive = typeof immersive === 'boolean' ? immersive : this.data.immersiveMode
+    const fallbackWidth = isImmersive ? metrics.width : metrics.width * (686 / 750)
+    const fallbackHeight = isImmersive ? metrics.height : metrics.width * (600 / 750)
+    this.applySceneSize(fallbackWidth, fallbackHeight, metrics.pixelRatio)
+
+    if (typeof this.createSelectorQuery !== 'function') return
+    const measure = () => {
+      this.createSelectorQuery()
+        .select('.space-stage')
+        .boundingClientRect((rect) => {
+          if (!rect || !rect.width || !rect.height) return
+          this.applySceneSize(rect.width, rect.height, metrics.pixelRatio)
+        })
+        .exec()
+    }
+    if (typeof wx.nextTick === 'function') wx.nextTick(measure)
+    else measure()
+  },
+
+  scheduleSceneSize(immersive) {
+    setTimeout(() => this.updateSceneSize(immersive), 50)
+  },
+
+  showTabBar() {
+    if (typeof wx.showTabBar === 'function') {
+      wx.showTabBar({ animation: false, fail: () => {} })
+    }
+  },
+
+  enterImmersive(nextState) {
+    this.setData(Object.assign({}, nextState, { immersiveMode: true }))
+    this.scheduleSceneSize(true)
+    if (typeof wx.hideTabBar === 'function') {
+      wx.hideTabBar({
+        animation: false,
+        complete: () => this.scheduleSceneSize(true),
+        fail: () => {}
+      })
+    }
+  },
+
+  leaveImmersive(nextState) {
+    this.setData(Object.assign({}, nextState, { immersiveMode: false }))
+    this.scheduleSceneSize(false)
+    if (typeof wx.showTabBar === 'function') {
+      wx.showTabBar({ animation: false, fail: () => {} })
+    }
   },
 
   handleXRReady() {
@@ -59,7 +177,7 @@ Page({
   },
 
   openCamera() {
-    const showCamera = () => this.setData({ cameraOpen: true, immersiveMode: true, cameraReady: false, arReady: false, arFailed: false, xrReady: true, xrFailed: false })
+    const showCamera = () => this.enterImmersive({ cameraOpen: true, cameraReady: false, arReady: false, arFailed: false, xrReady: true, xrFailed: false })
     if (typeof wx.getSetting !== 'function') {
       showCamera()
       return
@@ -96,11 +214,11 @@ Page({
   },
 
   closeCamera() {
-    this.setData({ cameraOpen: false, immersiveMode: this.data.avatarCreated, isCapturing: false, cameraReady: false, arReady: false, arFailed: false })
+    this.leaveImmersive({ cameraOpen: false, isCapturing: false, cameraReady: false, arReady: false, arFailed: false })
   },
 
   exitImmersive() {
-    this.setData({ immersiveMode: false })
+    this.leaveImmersive({ cameraOpen: false, isCapturing: false, cameraReady: false, arReady: false, arFailed: false })
   },
 
   handleCameraReady() {
@@ -108,7 +226,7 @@ Page({
   },
 
   handleCameraError() {
-    this.setData({ cameraOpen: false, immersiveMode: this.data.avatarCreated, isCapturing: false, cameraReady: false })
+    this.leaveImmersive({ cameraOpen: false, isCapturing: false, cameraReady: false, arReady: false })
     wx.showToast({ title: '相机暂时不可用，请从相册选择', icon: 'none' })
   },
 
@@ -193,14 +311,13 @@ Page({
     const name = getAvatarName((info.width || 0) + (info.height || 0))
     const version = (this.data.avatarVersion || 0) + 1
     const avatar = { path, meta: { width: info.width, height: info.height }, name, version }
-    this.setData({
+    this.enterImmersive({
       avatarPath: path,
       avatarMeta: avatar.meta,
       avatarCreated: true,
       avatarName: name,
       avatarVersion: version,
       cameraOpen: false,
-      immersiveMode: true,
       isCapturing: false,
       cameraReady: false,
       companionMessage: '你的分身已经准备好了，欢迎来到自己的宇宙。'
@@ -210,7 +327,7 @@ Page({
 
   resetAvatar() {
     wx.removeStorageSync('metaverse.avatar')
-    this.setData({ avatarPath: '', avatarMeta: null, avatarCreated: false, avatarVersion: 0, cameraOpen: false, immersiveMode: false, cameraReady: false, arReady: false, arFailed: false })
+    this.leaveImmersive({ avatarPath: '', avatarMeta: null, avatarCreated: false, avatarVersion: 0, cameraOpen: false, cameraReady: false, arReady: false, arFailed: false })
   },
 
   selectCompanion(e) {
