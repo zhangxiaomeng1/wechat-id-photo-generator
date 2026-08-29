@@ -11,6 +11,7 @@
     "backgroundTextStyle": "dark",
     "enablePullDownRefresh": false
   },
+  "lazyCodeLoading": "requiredComponents",
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "tabBar": {
