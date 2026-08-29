@@ -32,7 +32,7 @@ Page({
         avatarCreated: true,
         avatarName: saved.name || '光年旅人',
         avatarVersion: saved.version || Date.now(),
-        immersiveMode: true
+        immersiveMode: false
       })
     }
     if (companion) {
