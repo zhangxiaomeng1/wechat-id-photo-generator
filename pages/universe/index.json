@@ -6,6 +6,7 @@
   "navigationBarTitleText": "陪伴宇宙",
   "navigationBarBackgroundColor": "#0b1022",
   "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
   "backgroundColor": "#0b1022",
   "backgroundTextStyle": "dark",
   "enablePullDownRefresh": false,

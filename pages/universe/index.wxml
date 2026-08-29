@@ -15,7 +15,10 @@
     <view class="xr-stage" wx:if="{{xrReady}}">
       <xr-companion wx:if="{{!cameraOpen}}" avatar-path="{{avatarPath}}" avatar-version="{{avatarVersion}}" bind:ready="handleXRReady" bind:error="handleXRError" />
       <xr-ar-companion wx:else avatar-path="{{avatarPath}}" avatar-version="{{avatarVersion}}" bind:ready="handleXRReady" bind:arready="handleARReady" bind:error="handleARError" />
-      <view wx:if="{{!cameraOpen}}" class="xr-topbar"><view class="xr-live-pill"><text class="online-dot"></text>LIVE 3D</view><view class="xr-hint">拖动旋转 · 双指缩放</view><button wx:if="{{immersiveMode && !cameraOpen}}" class="immersive-close" bindtap="exitImmersive">退出全屏</button></view>
+    </view>
+    <camera wx:if="{{cameraOpen && !arReady && !arFailed}}" class="ar-loading-camera" device-position="front" flash="off" frame-size="medium" bindinitdone="handleCameraReady" binderror="handleCameraError"></camera>
+    <view wx:if="{{xrReady}}" class="xr-ui-layer">
+      <view wx:if="{{!cameraOpen}}" class="xr-topbar"><view class="xr-live-pill"><text class="online-dot"></text>LIVE 3D</view><view class="xr-hint">拖动旋转 · 双指缩放</view><button wx:if="{{immersiveMode}}" class="immersive-close" bindtap="exitImmersive">退出全屏</button></view>
       <view wx:if="{{cameraOpen}}" class="ar-topbar"><view class="xr-live-pill"><text class="online-dot"></text>{{arReady ? 'LIVE AR' : '连接实时画面'}}</view><button class="ar-close" bindtap="closeCamera">退出 AR</button></view>
       <view wx:if="{{avatarCreated}}" class="xr-avatar-chip"><image src="{{avatarPath}}" mode="aspectFill"></image><view><view class="xr-chip-name">{{avatarName}}</view><view class="xr-chip-status">头像已同步到场景</view></view></view>
       <view wx:if="{{avatarCreated && !cameraOpen}}" class="xr-avatar-badge"><text class="online-dot"></text>{{avatarName}} 已进入 3D 宇宙</view>

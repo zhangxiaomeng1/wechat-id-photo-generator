@@ -8,5 +8,6 @@ assert.strictEqual(
 )
 assert.strictEqual(appConfig.pages[0], 'pages/universe/index')
 assert.strictEqual(appConfig.tabBar.list[0].pagePath, 'pages/universe/index')
+assert.strictEqual(appConfig.style, 'v2')
 
 console.log('app config tests passed')

@@ -8,6 +8,7 @@
 .immersive-page {
   padding: 0;
   background: #050812;
+  overflow: hidden;
 }
 
 .immersive-page .universe-topbar {
@@ -16,7 +17,7 @@
   right: 0;
   left: 0;
   z-index: 10;
-  padding: 28rpx 32rpx 0;
+  padding: calc(env(safe-area-inset-top) + 28rpx) 32rpx 0;
 }
 
 .immersive-page .universe-intro,
@@ -30,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28rpx 12rpx 0;
+  padding: calc(env(safe-area-inset-top) + 28rpx) 12rpx 0;
 }
 
 .universe-kicker,
@@ -100,8 +101,14 @@
 }
 
 .immersive-stage {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
   height: 100vh;
   min-height: 100vh;
+  width: 100vw;
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -120,6 +127,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: 32rpx;
+  z-index: 0;
 }
 
 .xr-stage xr-companion {
@@ -129,9 +137,40 @@
 }
 
 .xr-stage xr-ar-companion {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.immersive-stage .xr-stage {
+  border-radius: 0;
+}
+
+.ar-loading-camera {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  background: #050812;
+}
+
+.xr-ui-layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+  pointer-events: none;
 }
 
 .xr-hint {
@@ -220,6 +259,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  pointer-events: auto;
 }
 
 .ar-close {
@@ -245,6 +285,7 @@
   border-radius: 22rpx;
   background: rgba(8, 12, 30, .72);
   backdrop-filter: blur(16rpx);
+  pointer-events: auto;
 }
 
 .ar-bottom-copy {
