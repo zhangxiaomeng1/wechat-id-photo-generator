@@ -42,7 +42,7 @@
     <view class="camera-actions"><button class="camera-close" bindtap="closeCamera">取消</button><button class="capture-button" loading="{{isCapturing}}" bindtap="takePhoto">拍摄并同步</button></view>
   </view>
 
-  <view wx:else class="create-card">
+  <view wx:if="{{!cameraOpen}}" class="create-card">
     <view class="card-kicker">CREATE YOUR AVATAR</view>
     <view class="card-title">创建我的分身</view>
     <view class="card-subtitle">照片只用于本地展示，不上传服务器。</view>
