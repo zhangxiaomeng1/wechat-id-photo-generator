@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "xr-companion": "/components/xr-companion/index"
+    "xr-companion": "/components/xr-companion/index",
+    "xr-ar-companion": "/components/xr-ar-companion/index"
   },
   "navigationBarTitleText": "陪伴宇宙",
   "navigationBarBackgroundColor": "#0b1022",

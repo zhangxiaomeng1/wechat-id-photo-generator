@@ -1,0 +1,35 @@
+<xr-scene
+  id="ar-companion-scene"
+  ar-system="modes:Face;camera:Front;pose3d: true;"
+  bind:ready="handleReady"
+  bind:ar-ready="handleARReady"
+  bind:error="handleError"
+>
+  <xr-assets bind:progress="handleAssetsProgress" bind:loaded="handleAssetsLoaded">
+    <xr-asset-load type="gltf" asset-id="face-model" src="https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/face.glb" />
+    <xr-asset-material asset-id="ar-avatar-mat" effect="standard" uniforms="u_baseColorFactor:1 1 1 1" />
+    <xr-asset-material asset-id="ar-body-mat" effect="standard" uniforms="u_baseColorFactor:0.18 0.30 0.70 1" />
+    <xr-asset-material asset-id="ar-glow-mat" effect="standard" uniforms="u_baseColorFactor:0.50 0.45 1 1" />
+    <xr-asset-material asset-id="ar-accent-mat" effect="standard" uniforms="u_baseColorFactor:1 0.68 0.28 1" />
+  </xr-assets>
+
+  <xr-node wx:if="{{arReady}}">
+    <xr-ar-tracker id="face-tracker" mode="Face" auto-sync="-1 105 104 45 98">
+      <xr-gltf id="avatar-gltf" wx:if="{{modelReady}}" position="0 0 0" rotation="0 0 0" scale="1 1 1" model="face-model" />
+      <xr-node node-id="avatar-fallback" wx:if="{{!modelReady}}">
+        <xr-mesh node-id="fallback-head" position="0 0 0" scale="0.70 0.78 0.66" geometry="sphere" material="ar-body-mat" />
+        <xr-mesh node-id="fallback-eye-l" position="-0.23 0.10 0.60" scale="0.08 0.12 0.05" geometry="sphere" material="ar-accent-mat" />
+        <xr-mesh node-id="fallback-eye-r" position="0.23 0.10 0.60" scale="0.08 0.12 0.05" geometry="sphere" material="ar-accent-mat" />
+      </xr-node>
+      <xr-mesh id="ar-avatar-portrait" position="0 0 0.62" scale="0.35 0.46 0.35" geometry="plane" material="ar-avatar-mat" visible="{{avatarTextureReady}}" />
+      <xr-mesh node-id="ar-halo" position="0 0.52 0" rotation="70 0 0" scale="0.78 0.055 0.78" geometry="cylinder" material="ar-glow-mat" />
+      <xr-mesh node-id="ar-halo-core" position="0 0.52 0" rotation="70 0 0" scale="0.58 0.02 0.58" geometry="cylinder" material="ar-accent-mat" />
+    </xr-ar-tracker>
+    <xr-camera id="camera" node-id="camera" clear-color="0 0 0 0" background="ar" is-ar-camera="" near="0.01" />
+  </xr-node>
+
+  <xr-node node-id="lights">
+    <xr-light type="ambient" color="1 1 1" intensity="1" />
+    <xr-light type="directional" rotation="180 0 0" color="0.82 0.90 1" intensity="3" />
+  </xr-node>
+</xr-scene>

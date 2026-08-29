@@ -5,6 +5,8 @@ Page({
     cameraOpen: false,
     isCapturing: false,
     cameraReady: false,
+    arReady: false,
+    arFailed: false,
     avatarPath: '',
     avatarMeta: null,
     avatarCreated: false,
@@ -45,13 +47,17 @@ Page({
     this.setData({ xrReady: true, xrFailed: false })
   },
 
+  handleARReady() {
+    this.setData({ arReady: true, arFailed: false, xrReady: true })
+  },
+
   handleXRError() {
     this.setData({ xrReady: false, xrFailed: true })
     wx.showToast({ title: '3D 场景不可用，已切换基础模式', icon: 'none' })
   },
 
   openCamera() {
-    const showCamera = () => this.setData({ cameraOpen: true, cameraReady: false })
+    const showCamera = () => this.setData({ cameraOpen: true, cameraReady: false, arReady: false, arFailed: false, xrReady: true, xrFailed: false })
     if (typeof wx.getSetting !== 'function') {
       showCamera()
       return
@@ -88,7 +94,7 @@ Page({
   },
 
   closeCamera() {
-    this.setData({ cameraOpen: false, isCapturing: false, cameraReady: false })
+    this.setData({ cameraOpen: false, isCapturing: false, cameraReady: false, arReady: false, arFailed: false })
   },
 
   handleCameraReady() {
@@ -100,16 +106,38 @@ Page({
     wx.showToast({ title: '相机暂时不可用，请从相册选择', icon: 'none' })
   },
 
+  handleARError() {
+    this.setData({ arFailed: true, arReady: false })
+    wx.showToast({ title: '实时 AR 不可用，已切换普通相机', icon: 'none' })
+  },
+
   takePhoto() {
     if (this.data.isCapturing) return
     this.setData({ isCapturing: true })
-    wx.createCameraContext().takePhoto({
-      quality: 'high',
-      success: (res) => this.acceptAvatarImage(res.tempImagePath),
-      fail: () => {
+    const finish = (path) => {
+      if (path) {
+        this.acceptAvatarImage(path)
+      } else {
         this.setData({ isCapturing: false })
-        wx.showToast({ title: '拍摄失败，请重试', icon: 'none' })
       }
+    }
+
+    if (typeof wx.chooseMedia === 'function') {
+      wx.chooseMedia({
+        count: 1,
+        mediaType: ['image'],
+        sourceType: ['camera'],
+        success: (res) => finish(res.tempFiles && res.tempFiles[0] && res.tempFiles[0].tempFilePath),
+        fail: () => finish('')
+      })
+      return
+    }
+
+    wx.chooseImage({
+      count: 1,
+      sourceType: ['camera'],
+      success: (res) => finish(res.tempFilePaths && res.tempFilePaths[0]),
+      fail: () => finish('')
     })
   },
 
@@ -175,7 +203,7 @@ Page({
 
   resetAvatar() {
     wx.removeStorageSync('metaverse.avatar')
-    this.setData({ avatarPath: '', avatarMeta: null, avatarCreated: false, avatarVersion: 0, cameraOpen: false, cameraReady: false })
+    this.setData({ avatarPath: '', avatarMeta: null, avatarCreated: false, avatarVersion: 0, cameraOpen: false, cameraReady: false, arReady: false, arFailed: false })
   },
 
   selectCompanion(e) {
