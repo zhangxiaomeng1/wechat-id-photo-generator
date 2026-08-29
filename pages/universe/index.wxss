@@ -128,6 +128,12 @@
   height: 100%;
 }
 
+.xr-stage xr-ar-companion {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .xr-hint {
   padding: 10rpx 14rpx;
   border-radius: 999rpx;
