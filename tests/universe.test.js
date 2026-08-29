@@ -41,8 +41,13 @@ assert.ok(templateSource.includes('wx:if="{{!immersiveMode}}" class="create-card
 assert.ok(styleSource.includes('.xr-stage xr-ar-companion'))
 assert.ok(pageSource.includes("sourceType: ['camera']"))
 const arComponentSource = fs.readFileSync(path.join(__dirname, '../components/xr-ar-companion/index.wxml'), 'utf8')
+const arStyleSource = fs.readFileSync(path.join(__dirname, '../components/xr-ar-companion/index.wxss'), 'utf8')
+const companionStyleSource = fs.readFileSync(path.join(__dirname, '../components/xr-companion/index.wxss'), 'utf8')
 assert.ok(arComponentSource.includes('ar-system='))
 assert.ok(arComponentSource.includes('xr-ar-tracker'))
 assert.ok(arComponentSource.includes('background="ar"'))
+assert.ok(arStyleSource.includes('position: absolute'))
+assert.ok(arStyleSource.includes('canvas'))
+assert.ok(companionStyleSource.includes('position: absolute'))
 
 console.log('universe tests passed')
